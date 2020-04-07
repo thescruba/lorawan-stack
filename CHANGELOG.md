@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ns.down.data.schedule.attempt` and `ns.down.join.schedule.attempt` events, which are triggered when Network Server attempts to schedule a respective downlink on Gateway Server.
 - `ns.down.data.schedule.success` and `ns.down.join.schedule.success` events, which are triggered when Network Server successfully schedules a respective downlink on Gateway Server.
 - `ns.down.data.schedule.fail` and `ns.down.join.schedule.fail` events, which are triggered when Network Server fails to schedule a respective downlink on Gateway Server.
+- Improve CLI support for unsetting fields (For example, `ttn-lw-cli dev update app dev --mac-settings.rx1-delay=null`).
 
 ### Changed
 
@@ -45,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - DeviceModeInd handling for LoRaWAN 1.1 devices.
 - Do not perform unnecessary gateway location updates.
 - Error display on failed end device import in the Console.
+- CLI prints error on invalid enum values instead of interpreting them as zero.
 
 ### Security
 
