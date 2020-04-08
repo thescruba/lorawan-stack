@@ -29,6 +29,7 @@ import toast from '../../../components/toast'
 import { latitude as latitudeRegexp, longitude as longitudeRegexp } from '../../lib/regexp'
 import sharedMessages from '../../../lib/shared-messages'
 import PropTypes from '../../../lib/prop-types'
+import LocationMap from '../../../components/map'
 
 const m = defineMessages({
   deleteWarning: 'Are you sure you want to delete this location entry?',
@@ -103,10 +104,12 @@ class LocationForm extends Component {
     super(props)
 
     this.form = React.createRef()
-  }
 
-  state = {
-    error: '',
+    this.state = {
+      latitude: props.initialValues.latitude,
+      longitude: props.initialValues.longitude,
+      error: '',
+    }
   }
 
   @bind
@@ -127,6 +130,23 @@ class LocationForm extends Component {
       await this.setState({ error })
       setSubmitting(false)
     }
+  }
+
+  @bind
+  handleClick(event) {
+    this.setState({ latitude: event.latlng.lat, longitude: event.latlng.lng })
+    this.form.current.setFieldValue('latitude', event.latlng.lat)
+    this.form.current.setFieldValue('longitude', event.latlng.lng)
+  }
+
+  @bind
+  handleLatitudeChange(latitude) {
+    this.setState({ latitude })
+  }
+
+  @bind
+  handleLongitudeChange(longitude) {
+    this.setState({ longitude })
   }
 
   @bind
@@ -155,9 +175,21 @@ class LocationForm extends Component {
       locationFieldsDisabled,
       allowDelete,
     } = this.props
-    const { error } = this.state
+    const { error, latitude, longitude } = this.state
 
     const entryExists = hasLocationSet(initialValues)
+
+    const marker =
+      latitude && longitude
+        ? [
+            {
+              position: {
+                latitude: Number(latitude),
+                longitude: Number(longitude),
+              },
+            },
+          ]
+        : undefined
 
     return (
       <React.Fragment>
@@ -182,6 +214,7 @@ class LocationForm extends Component {
             component={Input}
             required={!locationFieldsDisabled}
             disabled={locationFieldsDisabled}
+            onChange={this.handleLatitudeChange}
           />
           <Form.Field
             type="number"
@@ -192,6 +225,7 @@ class LocationForm extends Component {
             component={Input}
             required={!locationFieldsDisabled}
             disabled={locationFieldsDisabled}
+            onChange={this.handleLongitudeChange}
           />
           <Form.Field
             type="number"
@@ -203,6 +237,7 @@ class LocationForm extends Component {
             required={!locationFieldsDisabled}
             disabled={locationFieldsDisabled}
           />
+          <LocationMap markers={marker} onClick={this.handleClick} />
           <SubmitBar>
             <Form.Submit component={SubmitButton} message={sharedMessages.saveChanges} />
             <ModalButton
