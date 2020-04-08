@@ -14,15 +14,14 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Map, Marker, TileLayer } from 'react-leaflet'
 import classnames from 'classnames'
 import Leaflet from 'leaflet'
-
 import MarkerIcon from '../../assets/auxiliary-icons/location_pin.svg'
 
 import style from './map.styl'
 
-// Reset default marker icon
-delete Leaflet.Icon.Default.prototype._getIconUrl
+// delete Leaflet.Icon.Default.prototype._getIconUrl
 Leaflet.Icon.Default.mergeOptions({
   iconRetinaUrl: MarkerIcon,
   iconUrl: MarkerIcon,
@@ -34,19 +33,21 @@ Leaflet.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 })
 
-export default class Map extends React.Component {
+export default class LocationMap extends React.Component {
   static propTypes = {
-    // Id is a string used to give the map a unique ID.
-    id: PropTypes.string.isRequired,
     // LeafletConfig is an object which can contain any number of properties defined by the leaflet plugin and is used to overwrite the default configuration of leaflet.
     leafletConfig: PropTypes.shape({}),
     // Markers is an array of objects containing a specific properties
     markers: PropTypes.arrayOf(
       // Position is a object containing two properties latitude and longitude which are both numbers.
       PropTypes.shape({
-        position: PropTypes.objectOf(PropTypes.number),
+        position: PropTypes.shape({
+          longitude: PropTypes.number,
+          latitude: PropTypes.number,
+        }),
       }),
-    ).isRequired,
+    ),
+    onClick: PropTypes.func,
     // Widget is a boolean used to add a class name to the map container div for styling.
     widget: PropTypes.bool,
   }
@@ -54,55 +55,40 @@ export default class Map extends React.Component {
   static defaultProps = {
     leafletConfig: {},
     widget: false,
-  }
-
-  getMapCenter(markers) {
-    // This will calculate zoom and map center long/lang based on all markers provided.
-    // Currently it just returns the first marker.
-    // TODO: action (https://github.com/TheThingsNetwork/lorawan-stack/issues/1241)
-    return markers[0]
-  }
-
-  createMap(config, id) {
-    this.map = Leaflet.map(id, {
-      ...config,
-    })
-  }
-
-  createMarkers(markers) {
-    markers.map(marker =>
-      Leaflet.marker([marker.position.latitude, marker.position.longitude]).addTo(this.map),
-    )
-  }
-
-  componentDidMount() {
-    const { id, markers } = this.props
-
-    const { position } = markers.length >= 1 ? this.getMapCenter(markers) : markers[0]
-
-    const config = {
-      layers: [
-        Leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        }),
-      ],
-      center: [position.latitude, position.longitude],
-      zoom: 11,
-      minZoom: 1,
-      ...this.props.leafletConfig,
-    }
-
-    this.createMap(config, id)
-    this.createMarkers(markers, id)
+    markers: [],
+    onClick: undefined,
   }
 
   render() {
-    const { id, widget } = this.props
-
-    return (
-      <div className={style.container}>
-        <div className={classnames(style.map, { [style.widget]: widget })} id={id} />
-      </div>
+    const { widget, markers, onClick, leafletConfig } = this.props
+    const position =
+      markers.length >= 1
+        ? [markers[0].position.latitude, markers[0].position.longitude]
+        : [52.7, 4.9]
+    const map = (
+      <Map
+        className={classnames(style.map, { [style.widget]: widget })}
+        center={position}
+        zoom={7}
+        minZoom={7}
+        onClick={onClick}
+        {...leafletConfig}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {markers.map(
+          (marker, idx) =>
+            marker && (
+              <Marker
+                key={`marker-${idx}`}
+                position={[marker.position.latitude, marker.position.longitude]}
+              />
+            ),
+        )}
+      </Map>
     )
+    return <div className={style.container}>{map}</div>
   }
 }

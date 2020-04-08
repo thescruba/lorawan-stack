@@ -18,7 +18,7 @@ import sharedMessages from '../../../lib/shared-messages'
 
 import Message from '../../../lib/components/message'
 import Link from '../../../components/link'
-import Map from '../../map'
+import LocationMap from '../../map'
 
 import style from './widget.styl'
 
@@ -45,7 +45,7 @@ export default class MapWidget extends React.Component {
     }
 
     return markers.length > 0 ? (
-      <Map id={id} markers={markers} leafletConfig={leafletConfig} widget />
+      <LocationMap id={id} markers={markers} leafletConfig={leafletConfig} widget />
     ) : (
       <div className={style.mapDisabled}>
         <Message component="span" content={sharedMessages.noLocation} />
