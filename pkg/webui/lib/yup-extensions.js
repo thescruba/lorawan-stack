@@ -42,6 +42,11 @@ class NullableStringSchemaType extends StringSchema {
 
 Yup.nullableString = () => new NullableStringSchemaType()
 
+Yup.passValues = message => values => ({
+  message,
+  values,
+})
+
 Yup.addMethod(Yup.string, 'emptyOrLength', function(exactLength, message) {
   // eslint-disable-next-line no-invalid-this
   return this.test(
