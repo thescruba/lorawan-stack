@@ -30,7 +30,7 @@ const m = defineMessages({
   updateLocationFromStatusDescription:
     'Update the location of this gateway based on incoming status messages',
   setGatewayLocation: 'Gateway antenna location settings',
-  locationSource: 'Location Source',
+  locationSource: 'Location source',
   privacy: 'Privacy',
   publishLocation: 'Publish location',
 })

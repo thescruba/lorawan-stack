@@ -38,7 +38,7 @@ const initialValues = {
 }
 
 const m = defineMessages({
-  createOrganization: 'Create Organization',
+  createOrganization: 'Create organization',
 })
 
 @withFeatureRequirement(mayCreateOrganizations, { redirect: '/organizations' })

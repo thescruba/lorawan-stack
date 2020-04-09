@@ -40,16 +40,16 @@ import { mayCreateApplications, mayLinkApplication } from '../../lib/feature-che
 import api from '../../api'
 
 const m = defineMessages({
-  applicationName: 'Application Name',
+  applicationName: 'Application name',
   appIdPlaceholder: 'my-new-application',
-  appNamePlaceholder: 'My New Application',
+  appNamePlaceholder: 'My new application',
   appDescPlaceholder: 'Description for my new application',
   appDescDescription:
     'Optional application description; can also be used to save notes about the application',
-  createApplication: 'Create Application',
+  createApplication: 'Create application',
   linking: 'Linking',
   linkAutomatically: 'Link new application to Network Server automatically',
-  linkFailure: 'There was a problem while linking the application',
+  linkFailure: 'There was an error and the application could not be linked',
   linkFailureTitle: 'Application link failed',
 })
 
@@ -66,7 +66,7 @@ const validationSchema = Yup.object().shape({
   description: Yup.string(),
   network_server_address: Yup.string().when('link', {
     is: true,
-    then: Yup.string().matches(address, sharedMessages.validateFormat),
+    then: Yup.string().matches(address, sharedMessages.validateAddressFormat),
   }),
 })
 

@@ -28,7 +28,7 @@ import Radio from '../../../components/radio-button'
 import style from './rights-group.styl'
 
 const m = defineMessages({
-  selectAll: 'Select All',
+  selectAll: 'Select all',
   outOfOwnScopeRights:
     'This {entityType} has more rights than you have. These rights can not be modified.',
   outOfOwnScopePseudoRight:

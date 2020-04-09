@@ -31,7 +31,7 @@ import PropTypes from '../../../lib/prop-types'
 import style from './gateway-data.styl'
 
 const m = defineMessages({
-  gtwData: 'Gateway Data',
+  gtwData: 'Gateway data',
 })
 
 @connect(state => ({ gtwId: selectSelectedGatewayId(state) }))

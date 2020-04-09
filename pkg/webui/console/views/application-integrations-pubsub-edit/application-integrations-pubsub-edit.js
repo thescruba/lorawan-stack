@@ -28,9 +28,9 @@ import sharedMessages from '../../../lib/shared-messages'
 import api from '../../api'
 
 const m = defineMessages({
-  editPubsub: 'Edit PubSub',
-  updateSuccess: 'Successfully updated PubSub',
-  deleteSuccess: 'Successfully deleted PubSub',
+  editPubsub: 'Edit pub-sub',
+  updateSuccess: 'Pub-sub updated',
+  deleteSuccess: 'Pub-sub deleted',
 })
 
 @withBreadcrumb('apps.single.integrations.edit', function(props) {

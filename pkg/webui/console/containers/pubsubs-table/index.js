@@ -32,7 +32,7 @@ import PropTypes from '../../../lib/prop-types'
 
 const m = defineMessages({
   format: 'Format',
-  host: 'Server Host',
+  host: 'Server host',
 })
 
 const headers = [

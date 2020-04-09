@@ -25,7 +25,7 @@ import sharedMessages from '../../../lib/shared-messages'
 import PropTypes from '../../../lib/prop-types'
 
 const m = defineMessages({
-  orgData: 'Organization Data',
+  orgData: 'Organization data',
 })
 
 @withBreadcrumb('orgs.single.data', function(props) {

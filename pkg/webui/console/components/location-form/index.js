@@ -34,9 +34,9 @@ const m = defineMessages({
   deleteWarning: 'Are you sure you want to delete this location entry?',
   deleteLocation: 'Remove location entry',
   noLocationSet: 'There is currently no location information set',
-  updateSuccess: 'The location has been updated successfully',
-  deleteFailure: 'There was a problem removing the location',
-  deleteSuccess: 'The location has been removed successfully',
+  updateSuccess: 'Location updated',
+  deleteFailure: 'An error occurred and the location could not be deleted',
+  deleteSuccess: 'Location deleted',
 })
 
 const validationSchema = Yup.object().shape({

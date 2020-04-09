@@ -37,12 +37,12 @@ import style from './device-importer.styl'
 const m = defineMessages({
   proceed: 'Proceed',
   retry: 'Retry',
-  converting: 'Converting Templates…',
-  creating: 'Creating devices…',
+  converting: 'Converting templates…',
+  creating: 'Creating end devices…',
   operationInProgress: 'Operation in progress',
   operationHalted: 'Operation halted',
   operationFinished: 'Operation finished',
-  errorTitle: 'Could not complete operation',
+  errorTitle: 'There was an error and the operation could not be completed',
 })
 
 const initialState = {
@@ -137,7 +137,7 @@ export default class DeviceImporter extends Component {
     try {
       // Start template conversion
       this.setState({ step: 'conversion', status: 'processing' })
-      this.appendToLog('Converting device templates…')
+      this.appendToLog('Converting end device templates…')
       const templateStream = await api.deviceTemplates.convert(format_id, data)
       const devices = await new Promise((resolve, reject) => {
         const chunks = []
@@ -176,7 +176,7 @@ export default class DeviceImporter extends Component {
         step: 'creation',
         totalDevices: devices.length,
       })
-      this.appendToLog('Creating devices…')
+      this.appendToLog('Creating end devices…')
       const createStream = api.device.bulkCreate(appId, devices)
 
       await new Promise((resolve, reject) => {

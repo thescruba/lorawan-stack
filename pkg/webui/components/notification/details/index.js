@@ -22,8 +22,8 @@ import PropTypes from '../../../lib/prop-types'
 import style from './details.styl'
 
 const m = defineMessages({
-  showDetails: 'Show Details',
-  hideDetails: 'Hide Details',
+  showDetails: 'Show details',
+  hideDetails: 'Hide details',
 })
 
 @bind

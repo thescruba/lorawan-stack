@@ -33,7 +33,7 @@ import getCookieValue from '../../../lib/cookie'
 import style from './authorize.styl'
 
 const m = defineMessages({
-  modalTitle: 'Request for Permission',
+  modalTitle: 'Request for permission',
   modalSubtitle: '{clientName} is requesting permissions to do the following:',
   loginInfo: 'You are logged in as {userId}.',
   redirectInfo: 'You will be redirected to {redirectUri}',

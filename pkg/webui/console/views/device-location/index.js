@@ -33,7 +33,7 @@ import { selectSelectedDevice, selectSelectedDeviceId } from '../../store/select
 import PropTypes from '../../../lib/prop-types'
 
 const m = defineMessages({
-  setDeviceLocation: 'Set Device Location',
+  setDeviceLocation: 'Set end device location',
 })
 
 const getRegistryLocation = function(locations) {

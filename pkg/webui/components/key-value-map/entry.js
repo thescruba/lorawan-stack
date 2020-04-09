@@ -23,7 +23,7 @@ import Button from '../button'
 import style from './key-value-map.styl'
 
 const m = defineMessages({
-  deleteEntry: 'Delete Entry',
+  deleteEntry: 'Delete entry',
 })
 
 @bind

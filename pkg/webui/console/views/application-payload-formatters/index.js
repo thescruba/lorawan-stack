@@ -41,9 +41,9 @@ import {
 import style from './application-payload-formatters.styl'
 
 const m = defineMessages({
-  warningTitle: 'Linking Needed',
+  warningTitle: 'Linking needed',
   warningText: 'Please {link}, in order to configure payload formatters',
-  linkApplication: 'link your application',
+  linkApplication: 'Link your application',
 })
 
 @connect(

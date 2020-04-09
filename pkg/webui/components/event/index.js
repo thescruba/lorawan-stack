@@ -30,7 +30,7 @@ import ErrorEvent from './types/error'
 import style from './event.styl'
 
 const m = defineMessages({
-  eventData: 'Event Data',
+  eventData: 'Event data',
 })
 
 @bind

@@ -23,8 +23,8 @@ import {
 import { getWebhookFormats } from '../../store/actions/webhook-formats'
 
 const m = defineMessages({
-  title: 'Webhook Format',
-  warning: 'Could not retrieve the list of available webhook formats',
+  title: 'Webhook format',
+  warning: 'Webhook formats unavailable',
 })
 
 export default CreateFetchSelect({

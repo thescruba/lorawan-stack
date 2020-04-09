@@ -22,7 +22,7 @@ import Message from '../../../lib/components/message'
 import SafeInspector from '../../../components/safe-inspector'
 
 const m = defineMessages({
-  code: 'Your Authorization Code',
+  code: 'Your authorization code',
 })
 
 export default class Code extends React.Component {

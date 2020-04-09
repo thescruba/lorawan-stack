@@ -24,7 +24,7 @@ import { getDeviceTemplateFormats } from '../../store/actions/device-template-fo
 
 const m = defineMessages({
   title: 'Format',
-  warning: 'Could not retrieve the list of available device template formats',
+  warning: 'End device template formats unavailable',
 })
 
 const formatOptions = formats =>

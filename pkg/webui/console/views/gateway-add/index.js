@@ -33,7 +33,7 @@ import { selectUserId } from '../../store/selectors/user'
 import { mayCreateGateways } from '../../lib/feature-checks'
 
 const m = defineMessages({
-  createGateway: 'Create Gateway',
+  createGateway: 'Create gateway',
 })
 
 @withEnv

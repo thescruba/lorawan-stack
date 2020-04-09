@@ -29,9 +29,9 @@ import PropTypes from '../../../lib/prop-types'
 import api from '../../api'
 
 const m = defineMessages({
-  editWebhook: 'Edit Webhook',
-  updateSuccess: 'Successfully updated webhook',
-  deleteSuccess: 'Successfully deleted webhook',
+  editWebhook: 'Edit webhook',
+  updateSuccess: 'Webhook updated',
+  deleteSuccess: 'Webhook deleted',
 })
 
 @withBreadcrumb('apps.single.integrations.webhooks.edit', function(props) {

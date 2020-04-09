@@ -35,11 +35,12 @@ import {
 } from '../../lib/regexp'
 import OwnersSelect from '../../containers/owners-select'
 import UnitInput from '../../../components/unit-input'
+
 const m = defineMessages({
   enforced: 'Enforced',
-  dutyCycle: 'Duty Cycle',
+  dutyCycle: 'Duty cycle',
   gatewayIdPlaceholder: 'my-new-gateway',
-  gatewayNamePlaceholder: 'My New Gateway',
+  gatewayNamePlaceholder: 'My new gateway',
   gsServerAddressDescription: 'The address of the Gateway Server to connect to',
   gatewayDescPlaceholder: 'Description for my new gateway',
   gatewayDescDescription:
@@ -50,9 +51,9 @@ const m = defineMessages({
   updateChannelDescription: 'Channel for gateway automatic updates',
   enforceDutyCycleDescription:
     'Recommended for all gateways in order to respect spectrum regulations',
-  scheduleAnyTimeDelay: 'Schedule Any Time Delay',
+  scheduleAnyTimeDelay: 'Schedule any time delay',
   scheduleAnyTimeDescription:
-    'Configure Gateway Delay (minimum: {minimumValue}ms, default: {defaultValue}ms)',
+    'Configure gateway delay (minimum: {minimumValue}ms, default: {defaultValue}ms)',
   miliseconds: 'miliseconds',
   seconds: 'seconds',
   minutes: 'minutes',
