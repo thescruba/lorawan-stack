@@ -55,6 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Too strict webhook base URL validation in the Console.
 - Webhook and PubSub total count in the Console.
 - DevEUI is set when creating ABP devices via CLI.
+- Application Server does not crash when retrieving a webhook template that does not exist if no template repository has been configured.
+- Application Server does not crash when listing webhook templates if no template repository has been configured.
 
 ### Security
 
