@@ -217,4 +217,8 @@ html.has-navbar-fixed-top {
   }
 }
 
+details.with-padding {
+  padding-bottom: 1em;
+}
+
 @import "highlight.scss";

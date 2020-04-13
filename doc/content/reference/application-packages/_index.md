@@ -46,7 +46,7 @@ $ ttn-lw-cli applications packages associations set app1 dev1 25 --package-name 
 
 This will associate FPort `25` of device `dev1` of application `app1` with the application package `test-package`:
 
-<details><summary>Show output</summary>
+<details class="with-padding"><summary>Show output</summary>
 
 ```json
 {
@@ -65,7 +65,6 @@ This will associate FPort `25` of device `dev1` of application `app1` with the a
 }
 ```
 </details>
-<br>
 
 Some application packages are stateful, and as such their state can be updated using the `data-*` parameters:
 

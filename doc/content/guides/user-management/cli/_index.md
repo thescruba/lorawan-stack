@@ -111,7 +111,7 @@ After you do this, you'll be able to list the invitations you've sent:
 % ttn-lw-cli users invitations list
 ```
 
-<details><summary>Show output</summary>
+<details class="with-padding"><summary>Show output</summary>
 
 ```json
 [{
@@ -124,7 +124,7 @@ After you do this, you'll be able to list the invitations you've sent:
 ```
 
 </details>
-<br>
+
 And delete an invitation if you want to revoke it:
 
 ```bash

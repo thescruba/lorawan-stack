@@ -38,7 +38,7 @@ $ cat profile.json \
   | ttn-lw-cli end-device template assign-euis 70b3d57ed0000000 70b3d57ed0000001 --count 5 > devices.json
 ```
 
-<details><summary>Show output</summary>
+<details class="with-padding"><summary>Show output</summary>
 
 ```json
 {
@@ -198,7 +198,6 @@ $ cat profile.json \
 }
 ```
 </details>
-<br>
 
 Finally, you can create these devices in your {{% tts %}} application `test-app`, see [Executing Templates]({{< relref "executing.md" >}}).
 

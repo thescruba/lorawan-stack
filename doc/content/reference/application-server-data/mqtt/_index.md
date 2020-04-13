@@ -46,7 +46,7 @@ While you could subscribe to separate topics, for the tutorial subscribe to `#` 
 
 With your MQTT client subscribed, when a device joins the network, a `join` message gets published. For example, for a device ID `dev1`, the message will be published on the topic `v3/app1/devices/dev1/join`.
 
-<details><summary>Show example</summary>
+<details class="with-padding"><summary>Show example</summary>
 
 ```json
 {
@@ -72,8 +72,6 @@ With your MQTT client subscribed, when a device joins the network, a `join` mess
 }
 ```
 </details>
-
-<br>
 
 You can use the correlation IDs to follow messages as they pass through {{% tts %}}.
 
@@ -179,7 +177,7 @@ It is also possible to send multiple downlink messages on a single push because 
 
 Once the downlink gets acknowledged, a message is published to the topic `v3/{application id}/devices/{device id}/down/ack`.
 
-<details><summary>Show example</summary>
+<details class="with-padding"><summary>Show example</summary>
 
 ```json
 {
@@ -211,6 +209,5 @@ Once the downlink gets acknowledged, a message is published to the topic `v3/{ap
 }
 ```
 </details>
-<br>
 
 You see the correlation ID `my-correlation-id` of your downlink message. You can add multiple custom correlation IDs, for example to reference events or identifiers of your application.

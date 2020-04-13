@@ -59,7 +59,7 @@ $ cat template.json \
   --frequency-plan-id EU_863_870
 ```
 
-<details><summary>Show output</summary>
+<details class="with-padding"><summary>Show output</summary>
 
 ```json
 {
@@ -87,7 +87,6 @@ $ cat template.json \
 }
 ```
 </details>
-<br>
 
 See `$ ttn-lw-cli end-device template extend --help` for all the fields that can be set.
 
