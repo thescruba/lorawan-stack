@@ -39,7 +39,8 @@ class Devices {
   }
 
   _emitDefaults(paths, device) {
-    // Handle zero coordinates that are swallowed by the grpc-gateway for device location.
+    // Handle zero coordinates that are swallowed by the grpc-gateway for device
+    // location.
     const hasLocation = Boolean(device.locations) && Boolean(device.locations.user)
     const requestedLocation = paths.some(path => path.startsWith('location'))
 
@@ -126,7 +127,7 @@ class Devices {
     }
 
     const responses = await Promise.all(
-      // Simulate behavior of allSettled
+      // Simulate behavior of allSettled.
       requests.map(promise =>
         promise.then(
           value => ({
@@ -138,14 +139,15 @@ class Devices {
       ),
     )
 
-    // Check for errors and filter out 404 errors, since we cannot consistently return
-    // not found errors.
+    // Check for errors and filter out 404 errors, since we cannot consistently
+    // return not found errors.
     // TODO: Check for 404 errors, see https://github.com/TheThingsNetwork/lorawan-stack/issues/2323
     const errors = responses.filter(
       ({ status, reason }) => status === 'rejected' && reason.code !== 5,
     )
 
-    // Only proceed deleting the device from IS (so it is not accessible anymore) if there are no errors
+    // Only proceed deleting the device from IS (so it is not accessible
+    // anymore) if there are no errors.
     if (errors.length > 0) {
       throw errors[0].reason
     }
@@ -204,10 +206,11 @@ class Devices {
    * Updates the `deviceId` end device under the `applicationId` application.
    * This method will cause updates of the end device in all available stack
    * components (i.e. NS, AS, IS, JS) based on provided end device payload.
-   * @param {string} applicationId - Application ID
-   * @param {string} deviceId - Device ID
-   * @param {Object} patch - The end device payload
-   * @returns {Object} - Updated end device on successful update, an error otherwise
+   * @param {string} applicationId - The application ID.
+   * @param {string} deviceId -The end device ID.
+   * @param {Object} patch - The end device payload.
+   * @returns {Object} - Updated end device on successful update, an error
+   * otherwise.
    */
   async updateById(applicationId, deviceId, patch) {
     if (!Boolean(applicationId)) {
@@ -220,8 +223,8 @@ class Devices {
 
     const deviceMap = traverse(deviceEntityMap)
     const paths = traverse(patch).reduce(function(acc) {
-      // Only add the top level path for arrays, otherwise
-      // paths are generated for each item in the array.
+      // Only add the top level path for arrays, otherwise paths are generated
+      // for each item in the array.
       if (Array.isArray(this.node)) {
         acc.push(this.path)
         this.update(this.node, true)
@@ -232,9 +235,9 @@ class Devices {
 
         const parentAdded = acc.some(e => path[0].startsWith(e.join()))
 
-        // Only consider adding, if a common parent has not been already added
+        // Only consider adding, if a common parent has not been already added.
         if (!parentAdded) {
-          // Add only the deepest possible field mask of the patch
+          // Add only the deepest possible field mask of the patch.
           const commonPath = path.filter((_, index, array) => {
             const arr = array.slice(0, index + 1)
             return deviceMap.has(arr)
@@ -248,7 +251,8 @@ class Devices {
 
     const requestTree = splitSetPaths(paths)
 
-    // Assemble paths for end device fields that need to be retrieved first to make the update request
+    // Assemble paths for end device fields that need to be retrieved first to
+    // make the update request.
     const combinePaths = []
     if ('as' in requestTree && !('application_server_address' in patch)) {
       combinePaths.push(['application_server_address'])
@@ -284,7 +288,8 @@ class Devices {
       delete requestTree.js
     }
 
-    // Make sure to include `join_eui` and `dev_eui` for js request as those are required
+    // Make sure to include `join_eui` and `dev_eui` for js request as those are
+    // required.
     if ('js' in requestTree) {
       const { ids = {} } = patch
       const {
@@ -305,7 +310,7 @@ class Devices {
       },
     }
 
-    // Perform the requests
+    // Perform the requests.
     const devicePayload = Marshaler.payload(patch, 'end_device')
     const setParts = await makeRequests(
       this._api,
@@ -316,12 +321,12 @@ class Devices {
       devicePayload,
     )
 
-    // Filter out errored requests
+    // Filter out errored requests.
     const errors = setParts.filter(part => part.hasErrored)
 
-    // Handle possible errored requests
+    // Handle possible errored requests.
     if (errors.length !== 0) {
-      // Throw the first error
+      // Throw the first error.
       throw errors[0].error
     }
 
@@ -334,12 +339,14 @@ class Devices {
   /**
    * Creates an end device under the `applicationId` application.
    * This method will cause creating the end device in all available stack
-   * components (i.e. NS, AS, IS, JS) based on provided end device payload (`device`) or
-   * on field mask paths (`mask`).
-   * @param {string} applicationId - Application ID
-   * @param {Object} device - The end device payload
-   * @param {Array} mask -The field mask paths (by default is generated from `device` payload)
-   * @returns {Object} - Created end device on successful creation, an error otherwise
+   * components (i.e. NS, AS, IS, JS) based on provided end device payload
+   * (`device`) or on field mask paths (`mask`).
+   * @param {string} applicationId - Application ID.
+   * @param {Object} device - The end device payload.
+   * @param {Array} mask -The field mask paths (by default is generated from
+   * `device` payload).
+   * @returns {Object} - Created end device on successful creation, an error
+   * otherwise.
    */
   async create(applicationId, device, mask = Marshaler.fieldMaskFromPatch(device)) {
     if (!Boolean(applicationId)) {
@@ -382,12 +389,12 @@ class Devices {
       devicePayload,
     )
 
-    // Filter out errored requests
+    // Filter out errored requests.
     const errors = setParts.filter(part => part.hasErrored)
 
-    // Handle possible errored requests
+    // Handle possible errored requests.
     if (errors.length !== 0) {
-      // Roll back successfully created registry entries
+      // Roll back successfully created registry entries.
       const rollbackComponents = setParts.reduce((components, part) => {
         if (part.hasAttempted && !part.hasErrored) {
           components.push(part.component)
@@ -398,7 +405,7 @@ class Devices {
 
       this._deleteDevice(applicationId, deviceId, rollbackComponents)
 
-      // Throw the first error
+      // Throw the first error.
       throw errors[0].error
     }
 
@@ -409,15 +416,15 @@ class Devices {
    * Deletes the `deviceId` end device under the `applicationId` application.
    * This method will cause deletion of the end device in all available stack
    * components (i.e. NS, AS, IS, JS).
-   * @param {string} applicationId - Application ID
-   * @param {string} deviceId - Device ID
-   * @returns {Object} - Empty object on successful update, an error otherwise
+   * @param {string} applicationId - The application ID
+   * @param {string} deviceId - The end evice ID
+   * @returns {Object} - Empty object on successful update, an error otherwise.
    */
   async deleteById(applicationId, deviceId) {
     return this._deleteDevice(applicationId, deviceId)
   }
 
-  // End Device Template Converter
+  // End Device Template Converter.
 
   async listTemplateFormats() {
     const result = await this._api.EndDeviceTemplateConverter.ListFormats()
@@ -427,7 +434,7 @@ class Devices {
   }
 
   convertTemplate(formatId, data) {
-    // This is a stream endpoint
+    // This is a stream endpoint.
     return this._api.EndDeviceTemplateConverter.Convert(undefined, {
       format_id: formatId,
       data,

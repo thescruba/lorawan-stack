@@ -139,7 +139,7 @@ export default class DeviceImporter extends Component {
     } = values
 
     try {
-      // Start template conversion
+      // Start template conversion.
       this.setState({ step: 'conversion', status: 'processing' })
       this.appendToLog('Converting device templates…')
       const templateStream = await api.deviceTemplates.convert(format_id, data)
@@ -154,7 +154,7 @@ export default class DeviceImporter extends Component {
         templateStream.on('close', () => resolve(chunks))
       })
 
-      // Apply default values
+      // Apply default values.
       for (const deviceAndFieldMask of devices) {
         const { end_device: device, field_mask } = deviceAndFieldMask
         if (set_claim_auth_code && jsSelected) {
@@ -175,7 +175,7 @@ export default class DeviceImporter extends Component {
         }
       }
 
-      // Start batch device creation
+      // Start batch device creation.
       this.setState({
         step: 'creation',
         totalDevices: devices.length,
