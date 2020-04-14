@@ -17,11 +17,12 @@ import PropTypes from 'prop-types'
 import { Map, Marker, TileLayer } from 'react-leaflet'
 import classnames from 'classnames'
 import Leaflet from 'leaflet'
+import bind from 'autobind-decorator'
 import MarkerIcon from '../../assets/auxiliary-icons/location_pin.svg'
 
 import style from './map.styl'
 
-// delete Leaflet.Icon.Default.prototype._getIconUrl
+delete Leaflet.Icon.Default.prototype._getIconUrl
 Leaflet.Icon.Default.mergeOptions({
   iconRetinaUrl: MarkerIcon,
   iconUrl: MarkerIcon,
@@ -33,10 +34,22 @@ Leaflet.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 })
 
+const defaultLocation = [52.3, 4.8]
+const tileLayer = (
+  <TileLayer
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  />
+)
+const defaultMinZoom = 7
+
 export default class LocationMap extends React.Component {
   static propTypes = {
+    className: PropTypes.string,
     // LeafletConfig is an object which can contain any number of properties defined by the leaflet plugin and is used to overwrite the default configuration of leaflet.
-    leafletConfig: PropTypes.shape({}),
+    leafletConfig: PropTypes.shape({
+      zoom: PropTypes.number,
+    }),
     // Markers is an array of objects containing a specific properties
     markers: PropTypes.arrayOf(
       // Position is a object containing two properties latitude and longitude which are both numbers.
@@ -53,42 +66,58 @@ export default class LocationMap extends React.Component {
   }
 
   static defaultProps = {
-    leafletConfig: {},
+    className: undefined,
+    leafletConfig: {
+      zoom: 7,
+    },
     widget: false,
     markers: [],
     onClick: undefined,
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      zoomLevel: props.leafletConfig.zoom,
+    }
+  }
+
+  @bind
+  onZoomEvent(event) {
+    this.setState({ zoomLevel: event.target._zoom })
+  }
+
   render() {
-    const { widget, markers, onClick, leafletConfig } = this.props
+    const { className, widget, markers, onClick, leafletConfig } = this.props
+    const { zoomLevel } = this.state
     const position =
       markers.length >= 1
         ? [markers[0].position.latitude, markers[0].position.longitude]
-        : [52.7, 4.9]
-    const map = (
-      <Map
-        className={classnames(style.map, { [style.widget]: widget })}
-        center={position}
-        zoom={7}
-        minZoom={7}
-        onClick={onClick}
-        {...leafletConfig}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {markers.map(
-          (marker, idx) =>
-            marker && (
-              <Marker
-                key={`marker-${idx}`}
-                position={[marker.position.latitude, marker.position.longitude]}
-              />
-            ),
-        )}
-      </Map>
+        : defaultLocation
+    return (
+      <div className={classnames(className, style.container)}>
+        <Map
+          className={classnames(style.map, { [style.widget]: widget })}
+          center={position}
+          minZoom={defaultMinZoom}
+          onZoomend={this.onZoomEvent}
+          onClick={onClick}
+          {...leafletConfig}
+          zoom={zoomLevel}
+        >
+          {tileLayer}
+          {markers.map(
+            marker =>
+              marker && (
+                <Marker
+                  key={`marker-${marker.position.latitude}-${marker.position.altitude}`}
+                  position={[marker.position.latitude, marker.position.longitude]}
+                />
+              ),
+          )}
+        </Map>
+      </div>
     )
-    return <div className={style.container}>{map}</div>
   }
 }
