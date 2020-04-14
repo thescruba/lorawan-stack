@@ -31,6 +31,8 @@ import sharedMessages from '../../../lib/shared-messages'
 import PropTypes from '../../../lib/prop-types'
 import LocationMap from '../../../components/map'
 
+import style from './location-form.styl'
+
 const m = defineMessages({
   deleteWarning: 'Are you sure you want to delete this location entry?',
   deleteLocation: 'Remove location entry',
@@ -134,9 +136,14 @@ class LocationForm extends Component {
 
   @bind
   handleClick(event) {
+    const { setValues, state } = this.form.current
     this.setState({ latitude: event.latlng.lat, longitude: event.latlng.lng })
-    this.form.current.setFieldValue('latitude', event.latlng.lat)
-    this.form.current.setFieldValue('longitude', event.latlng.lng)
+    setValues({
+      ...state.values,
+      latitude: event.latlng.lat,
+      longitude: event.latlng.lng,
+      altitude: state.values.altitude ? state.values.altitude : 0,
+    })
   }
 
   @bind
@@ -179,17 +186,17 @@ class LocationForm extends Component {
 
     const entryExists = hasLocationSet(initialValues)
 
-    const marker =
-      latitude && longitude
-        ? [
-            {
-              position: {
-                latitude: Number(latitude),
-                longitude: Number(longitude),
-              },
-            },
-          ]
-        : undefined
+    let marker
+    if (latitude && longitude) {
+      marker = [
+        {
+          position: {
+            latitude: Number(latitude),
+            longitude: Number(longitude),
+          },
+        },
+      ]
+    }
 
     return (
       <React.Fragment>
@@ -205,6 +212,7 @@ class LocationForm extends Component {
         >
           <Message component="h4" content={formTitle} />
           {children}
+          <LocationMap widget className={style.map} markers={marker} onClick={this.handleClick} />
           <Form.Field
             type="number"
             step="any"
@@ -237,7 +245,6 @@ class LocationForm extends Component {
             required={!locationFieldsDisabled}
             disabled={locationFieldsDisabled}
           />
-          <LocationMap markers={marker} onClick={this.handleClick} />
           <SubmitBar>
             <Form.Submit component={SubmitButton} message={sharedMessages.saveChanges} />
             <ModalButton
