@@ -42,6 +42,7 @@ export default class MapWidget extends React.Component {
 
     const leafletConfig = {
       zoomControl: false,
+      zoom: 7,
     }
 
     return markers.length > 0 ? (
