@@ -212,7 +212,13 @@ class LocationForm extends Component {
         >
           <Message component="h4" content={formTitle} />
           {children}
-          <LocationMap widget className={style.map} markers={marker} onClick={this.handleClick} />
+          <LocationMap
+            widget
+            leafletConfig={{ zoom: 7, minZoom: 1 }}
+            className={style.map}
+            markers={marker}
+            onClick={this.handleClick}
+          />
           <Form.Field
             type="number"
             step="any"
