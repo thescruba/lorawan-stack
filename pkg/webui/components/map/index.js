@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import React from 'react'
+
 import PropTypes from 'prop-types'
 import { Map, Marker, TileLayer } from 'react-leaflet'
 import classnames from 'classnames'
@@ -47,9 +48,7 @@ export default class LocationMap extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     // LeafletConfig is an object which can contain any number of properties defined by the leaflet plugin and is used to overwrite the default configuration of leaflet.
-    leafletConfig: PropTypes.shape({
-      zoom: PropTypes.number,
-    }),
+    leafletConfig: PropTypes.shape({}),
     // Markers is an array of objects containing a specific properties
     markers: PropTypes.arrayOf(
       // Position is a object containing two properties latitude and longitude which are both numbers.
@@ -66,10 +65,8 @@ export default class LocationMap extends React.Component {
   }
 
   static defaultProps = {
+    leafletConfig: {},
     className: undefined,
-    leafletConfig: {
-      zoom: 7,
-    },
     widget: false,
     markers: [],
     onClick: undefined,
@@ -80,7 +77,36 @@ export default class LocationMap extends React.Component {
 
     this.state = {
       zoomLevel: props.leafletConfig.zoom,
+      mapCenter:
+        props.markers.length >= 1
+          ? [props.markers[0].position.latitude, props.markers[0].position.longitude]
+          : this.getCurrentLocation(),
     }
+  }
+
+  getCurrentLocation() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        return [position.coords.latitude, position.coords.longitude]
+      })
+    }
+    return defaultLocation
+  }
+
+  // fix the issue where tiles sometimes partially load
+  componentDidMount() {
+    const map = this.refs.map.leafletElement
+    setTimeout(() => {
+      map.invalidateSize()
+    }, 250)
+  }
+
+  @bind
+  handleClick(event) {
+    const { onClick } = this.props
+    const map = this.refs.map.leafletElement
+    this.setState({ mapCenter: map.getCenter() })
+    onClick(event)
   }
 
   @bind
@@ -89,22 +115,19 @@ export default class LocationMap extends React.Component {
   }
 
   render() {
-    const { className, widget, markers, onClick, leafletConfig } = this.props
-    const { zoomLevel } = this.state
-    const position =
-      markers.length >= 1
-        ? [markers[0].position.latitude, markers[0].position.longitude]
-        : defaultLocation
+    const { className, widget, markers, leafletConfig } = this.props
+    const { zoomLevel, mapCenter } = this.state
     return (
-      <div className={classnames(className, style.container)}>
+      <div className={classnames(style.container, className)}>
         <Map
+          ref="map"
           className={classnames(style.map, { [style.widget]: widget })}
-          center={position}
           minZoom={defaultMinZoom}
           onZoomend={this.onZoomEvent}
-          onClick={onClick}
+          onClick={this.handleClick}
           {...leafletConfig}
           zoom={zoomLevel}
+          center={mapCenter}
         >
           {tileLayer}
           {markers.map(
