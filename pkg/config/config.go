@@ -193,6 +193,13 @@ func (m *Manager) WithConfig(defaults interface{}) *pflag.FlagSet {
 // InitializeWithDefaults is the same as Initialize but it sets some sane default options (see DefaultOptions)
 // alongside the passed in options.
 func InitializeWithDefaults(name, envPrefix string, defaults interface{}, opts ...Option) *Manager {
+	// Use $SNAP_USER_COMMON as $XDG_CONFIG_HOME when running as a snap
+	snapDir := os.Getenv("SNAP_USER_COMMON")
+	snapName := os.Getenv("SNAP_NAME")
+	xdgConfigHome := os.Getenv("XDG_CONFIG_HOME")
+	if snapName == "ttn-lw-stack" && snapDir != "" && xdgConfigHome == "" {
+		os.Setenv("XDG_CONFIG_HOME", snapDir)
+	}
 	return Initialize(name, envPrefix, defaults, append(DefaultOptions, opts...)...)
 }
 
