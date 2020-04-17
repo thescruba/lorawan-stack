@@ -1907,6 +1907,15 @@
       "file": "registry.go"
     }
   },
+  "error:pkg/applicationserver/io/web:err_no_store": {
+    "translations": {
+      "en": "no template store"
+    },
+    "description": {
+      "package": "pkg/applicationserver/io/web",
+      "file": "templates.go"
+    }
+  },
   "error:pkg/applicationserver/io/web:fetch": {
     "translations": {
       "en": "fetching failed"
